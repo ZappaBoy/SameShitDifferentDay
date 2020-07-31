@@ -1,0 +1,2 @@
+# SameShitDifferentDay
+Init day script
