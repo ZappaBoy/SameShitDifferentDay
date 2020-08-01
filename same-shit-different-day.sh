@@ -45,7 +45,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
     echo -e "${GREEN}---------- Starting Youtube ----------${NC}"
     YOUTUBE_URL=$(generate_url ${TO_SEARCH[@]})
-    chromium ${YOUTUBE_URL} 1> /dev/null 2> /dev/null &
+    xdg-open ${YOUTUBE_URL} 1> /dev/null 2> /dev/null &
 else
     echo -e "\n${RED}Seriously...?${NC}\n"
 fi
