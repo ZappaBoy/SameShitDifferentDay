@@ -10,7 +10,9 @@ RED='\033[31m'
 GREEN='\033[32m'
 
 YOUTUBE_SEARCH_BASE_URL='https://www.youtube.com/results?search_query='
-TELEGRAM_PATH='/home/zappaboy/Desktop/Programs/Telegram/Telegram'
+TELEGRAM_PATH='/home/${USER}/Desktop/Programs/Telegram/Telegram'
+
+CACHE="/home/${USER}/.cache/.same-shit-different-day.cache"
 
 function generate_url (){
     local SEARCH_STRING=${1}
@@ -23,19 +25,27 @@ function generate_url (){
 echo -e "${RED}---------- Same shit different day ----------${NC}"
 
 echo -e "${GREEN}---------- Starting Telegram ----------${NC}"
-${TELEGRAM_PATH}
+${TELEGRAM_PATH} 1> /dev/null 2> /dev/null &
 
 echo -e "${GREEN}---------- Starting Discord ----------${NC}"
-discord
+discord 1> /dev/null 2> /dev/null &
 
 read -p "Play music [Y/n]? " -n 1 -r
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo -e "\n"
-    read -a TO_SEARCH -p "What kind of music do you want to listen today? >  "
+    LAST_SEARCH=$(cat ${CACHE})
+    read -a TO_SEARCH -p "What kind of music do you want to listen today [${LAST_SEARCH}]? "
+
+    if [ -z "${TO_SEARCH}" ]; then
+	TO_SEARCH=${LAST_SEARCH}
+    else
+	echo ${TO_SEARCH[@]} > ${CACHE}
+    fi
+
     echo -e "${GREEN}---------- Starting Youtube ----------${NC}"
     YOUTUBE_URL=$(generate_url ${TO_SEARCH[@]})
-    chromium ${YOUTUBE_URL}
+    chromium ${YOUTUBE_URL} 1> /dev/null 2> /dev/null &
 else
     echo -e "\n${RED}Seriously...?${NC}\n"
 fi
@@ -43,6 +53,7 @@ fi
 # Perform auto update
 echo -e "${GREEN}---------- Updating System ----------${NC}"
 sudo pacman -Syyuu --noconfirm
+
 echo -e "\n${RED}"
 cat << _EOF_
 .... ........,..,...................,...... ... ....... ...... .....................................
