@@ -10,7 +10,7 @@ RED='\033[31m'
 GREEN='\033[32m'
 
 YOUTUBE_SEARCH_BASE_URL='https://www.youtube.com/results?search_query='
-TELEGRAM_PATH='/home/${USER}/Desktop/Programs/Telegram/Telegram'
+TELEGRAM_PATH="/home/${USER}/Desktop/Programs/Telegram/Telegram"
 
 CACHE="/home/${USER}/.cache/.same-shit-different-day.cache"
 
@@ -19,33 +19,35 @@ function generate_url (){
     for i in "${@:2}"; do
 	SEARCH_STRING+='+'${i}
     done
-    echo ${YOUTUBE_SEARCH_BASE_URL}${SEARCH_STRING}
+    echo "${YOUTUBE_SEARCH_BASE_URL}${SEARCH_STRING}"
 }
 
 echo -e "${RED}---------- Same shit different day ----------${NC}"
 
 echo -e "${GREEN}---------- Starting Telegram ----------${NC}"
-${TELEGRAM_PATH} 1> /dev/null 2> /dev/null &
+nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
 
 echo -e "${GREEN}---------- Starting Discord ----------${NC}"
-discord 1> /dev/null 2> /dev/null &
+nohup discord >/dev/null 2>&1 &
+
+sleep 3 && wmctrl -i -a "${WINDOWID}"
 
 read -p "Play music [Y/n]? " -n 1 -r
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo -e "\n"
-    LAST_SEARCH=$(cat ${CACHE})
-    read -a TO_SEARCH -p "What kind of music do you want to listen today [${LAST_SEARCH}]? "
+    LAST_SEARCH=$(cat "${CACHE}")
+    read -r -a TO_SEARCH -p "What kind of music do you want to listen today [${LAST_SEARCH}]? "
 
     if [ -z "${TO_SEARCH}" ]; then
 	TO_SEARCH=${LAST_SEARCH}
     else
-	echo ${TO_SEARCH[@]} > ${CACHE}
+	echo "${TO_SEARCH[@]}" > "${CACHE}"
     fi
 
     echo -e "${GREEN}---------- Starting Youtube ----------${NC}"
-    YOUTUBE_URL=$(generate_url ${TO_SEARCH[@]})
-    xdg-open ${YOUTUBE_URL} 1> /dev/null 2> /dev/null &
+    YOUTUBE_URL=$(generate_url "${TO_SEARCH[@]}")
+    nohup xdg-open "${YOUTUBE_URL}" >/dev/null 2>&1 &
 else
     echo -e "\n${RED}Seriously...?${NC}\n"
 fi
