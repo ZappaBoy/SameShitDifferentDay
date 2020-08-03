@@ -24,18 +24,11 @@ function generate_url (){
 }
 
 echo -e "${RED}---------- Same shit different day ----------${NC}"
+
+read -p "Welcome back, do you want play music [Y/n]? " -n 1 -r
+
+# Getting window name when user answer (The script window is the active window)
 WINDOW_NAME="$(xdotool getactivewindow getwindowname)"
-
-echo -e "${GREEN}---------- Starting Telegram ----------${NC}"
-nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
-
-echo -e "${GREEN}---------- Starting Discord ----------${NC}"
-nohup discord >/dev/null 2>&1 &
-
-# Wait and focusing again on the windows where script running
-sleep 4 && wmctrl -a $(echo "${WINDOW_NAME}")
-
-read -p "Play music [Y/n]? " -n 1 -r
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo -e "\n"
@@ -55,8 +48,14 @@ else
     echo -e "\n${RED}Seriously...?${NC}\n"
 fi
 
+echo -e "${GREEN}---------- Starting Telegram ----------${NC}"
+nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
+
+echo -e "${GREEN}---------- Starting Discord ----------${NC}"
+nohup discord >/dev/null 2>&1 &
+
 # Wait and focusing again on the windows where script running
-sleep 3 && wmctrl -a $(echo "${WINDOW_NAME}")
+sleep 5 && wmctrl -a $(echo "${WINDOW_NAME}")
 
 # Perform auto update
 echo -e "${GREEN}---------- Updating System ----------${NC}"
