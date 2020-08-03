@@ -24,7 +24,7 @@ function generate_url (){
 }
 
 echo -e "${RED}---------- Same shit different day ----------${NC}"
-WINDOW_NAME=$(xdotool getactivewindow getwindowname)
+WINDOW_NAME="$(xdotool getactivewindow getwindowname)"
 
 echo -e "${GREEN}---------- Starting Telegram ----------${NC}"
 nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
@@ -33,7 +33,7 @@ echo -e "${GREEN}---------- Starting Discord ----------${NC}"
 nohup discord >/dev/null 2>&1 &
 
 # Wait and focusing again on the windows where script running
-sleep 4 && wmctrl -a "$WINDOW_NAME"
+sleep 4 && wmctrl -a $(echo "${WINDOW_NAME}")
 
 read -p "Play music [Y/n]? " -n 1 -r
 
