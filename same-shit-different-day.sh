@@ -14,6 +14,7 @@ TELEGRAM_PATH="/home/${USER}/Desktop/Programs/Telegram/Telegram"
 
 CACHE="/home/${USER}/.cache/.same-shit-different-day.cache"
 
+
 function generate_url (){
     local SEARCH_STRING=${1}
     for i in "${@:2}"; do
@@ -23,6 +24,7 @@ function generate_url (){
 }
 
 echo -e "${RED}---------- Same shit different day ----------${NC}"
+WINDOW_NAME=$(xdotool getactivewindow getwindowname)
 
 echo -e "${GREEN}---------- Starting Telegram ----------${NC}"
 nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
@@ -30,7 +32,8 @@ nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
 echo -e "${GREEN}---------- Starting Discord ----------${NC}"
 nohup discord >/dev/null 2>&1 &
 
-sleep 3 && wmctrl -i -a "${WINDOWID}"
+# Wait and focusing again on the windows where script running
+sleep 4 && wmctrl -a "$WINDOW_NAME"
 
 read -p "Play music [Y/n]? " -n 1 -r
 
@@ -51,6 +54,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 else
     echo -e "\n${RED}Seriously...?${NC}\n"
 fi
+
+# Wait and focusing again on the windows where script running
+sleep 3 && wmctrl -a "$WINDOW_NAME"
 
 # Perform auto update
 echo -e "${GREEN}---------- Updating System ----------${NC}"
