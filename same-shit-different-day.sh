@@ -56,7 +56,7 @@ else
 fi
 
 # Wait and focusing again on the windows where script running
-sleep 3 && wmctrl -a "$WINDOW_NAME"
+sleep 3 && wmctrl -a $(echo "${WINDOW_NAME}")
 
 # Perform auto update
 echo -e "${GREEN}---------- Updating System ----------${NC}"
