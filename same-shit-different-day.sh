@@ -8,12 +8,10 @@
 NC='\033[0m'
 RED='\033[31m'
 GREEN='\033[32m'
-
+TARGET_TERMINAL="${1:-yakuake}"
 YOUTUBE_SEARCH_BASE_URL='https://www.youtube.com/results?search_query='
 TELEGRAM_PATH="/home/${USER}/Desktop/Programs/Telegram/Telegram"
-
-CACHE="/home/${USER}/.cache/.same-shit-different-day.cache"
-
+CACHE="/home/${USER}/.cache/same-shit-different-day.cache"
 
 function generate_url (){
     local SEARCH_STRING=${1}
@@ -22,6 +20,10 @@ function generate_url (){
     done
     echo "${YOUTUBE_SEARCH_BASE_URL}${SEARCH_STRING}"
 }
+
+# Quit if terminal is different from target
+IS_TARGET_TERMINAL=$(xdotool getactivewindow getwindowname | grep -i "${TARGET_TERMINAL}")
+[ -z "${IS_TARGET_TERMINAL}"  ] && echo "Welcome back ${USER}. This is the same shit but different day." && exit 0
 
 echo -e "${RED}---------- Same shit different day ----------${NC}"
 
