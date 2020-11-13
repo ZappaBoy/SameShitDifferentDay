@@ -56,8 +56,9 @@ nohup "${TELEGRAM_PATH}" >/dev/null 2>&1 &
 echo -e "${GREEN}---------- Starting Discord ----------${NC}"
 nohup discord >/dev/null 2>&1 &
 
+disown -a
 # Wait and focusing again on the windows where script running
-sleep 5 && wmctrl -a $(echo "${WINDOW_NAME}")
+sleep 5 && wmctrl -a "${WINDOW_NAME}"
 
 # Perform auto update
 echo -e "${GREEN}---------- Updating System ----------${NC}"
